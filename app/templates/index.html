@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLEIFÜHL</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #100145;
+            color: #bb6100;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            letter-spacing: 4px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .chat-box {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        #mesaj {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+        }
+
+        #cevap {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            min-height: 30px;
+        }
+
+        .lead-form {
+            margin-top: 30px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>BLEIFÜHL</h1>
+
+    <p>
+        Hisset. Tasarla. Kal.
+    </p>
+
+    <div class="chat-box">
+
+        <textarea
+            id="mesaj"
+            rows="4"
+            placeholder="Size nasıl yardımcı olabiliriz?"
+        ></textarea>
+
+        <button id="sor">Sor</button>
+
+        <div id="cevap"></div>
+
+        <div class="lead-form">
+
+            <input
+                id="isim"
+                type="text"
+                placeholder="Adınız"
+            >
+
+            <input
+                id="telefon"
+                type="text"
+                placeholder="Telefon numaranız"
+            >
+
+            <button id="kaydet">İletişim bilgilerimi kaydet</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const mesajInput = document.getElementById("mesaj");
+    const cevapDiv = document.getElementById("cevap");
+    const sorButton = document.getElementById("sor");
+
+    const isimInput = document.getElementById("isim");
+    const telefonInput = document.getElementById("telefon");
+    const kaydetButton = document.getElementById("kaydet");
+
+
+    sorButton.addEventListener("click", async function () {
+
+        const mesaj = mesajInput.value;
+
+        if (!mesaj) {
+            cevapDiv.textContent = "Lütfen bir mesaj yazın.";
+            return;
+        }
+
+        const response = await fetch("/api/sohbet", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                mesaj: mesaj,
+                gecmis: []
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.basari) {
+            cevapDiv.textContent = data.cevap;
+        } else {
+            cevapDiv.textContent = data.hata;
+        }
+    });
+
+
+    kaydetButton.addEventListener("click", async function () {
+
+        const isim = isimInput.value;
+        const telefon = telefonInput.value;
+        const mesaj = mesajInput.value;
+
+        if (!isim || !telefon) {
+            alert("İsim ve telefon gerekli.");
+            return;
+        }
+
+        const response = await fetch("/api/leads", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                isim: isim,
+                telefon: telefon,
+                mesaj: mesaj
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.basari) {
+            alert("Bilgileriniz kaydedildi.");
+        } else {
+            alert(data.hata);
+        }
+    });
+</script>
+
+</body>
+</html>

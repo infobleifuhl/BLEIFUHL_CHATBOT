@@ -10,6 +10,8 @@ class Config:
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
     AI_PROVIDER = os.environ.get("AI_PROVIDER", "groq")
 
+
+ 
     BUSINESS_CONTEXT = os.environ.get(
         "BUSINESS_CONTEXT",
         """BLEIFÜHL is a creative brand focused on personalized invitations,

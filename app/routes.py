@@ -108,11 +108,11 @@ def lead_ekle():
 @api.route("/leads", methods=["GET"])
 def leadleri_getir():
 
-    if not session.get("admin_logged_in"):
-        return jsonify({
-            "basari": False,
-            "hata": "Yetkisiz erişim."
-        }), 401
+    #if not session.get("admin_logged_in"):
+        #return jsonify({
+            #"basari": False,
+           # "hata": "Yetkisiz erişim."
+       # }), 401
 
     try:
         leads = database.tum_leadler()

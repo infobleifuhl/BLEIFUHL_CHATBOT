@@ -10,7 +10,8 @@ class Config:
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
     AI_PROVIDER = os.environ.get("AI_PROVIDER", "groq")
 
-
+    ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD") 
  
     BUSINESS_CONTEXT = os.environ.get(
         "BUSINESS_CONTEXT",
